@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FinFlow SIP & EMI Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* CSS content is provided in the next section */
+  </style>
+</head>
+<body>
+  <div class="bg-animated">
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+  </div>
+
+  <div class="shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark">
+          <div class="brand-inner-orbit"></div>
+        </div>
+        <div class="brand-copy">
+          <h1>FinFlow SIP &amp; EMI Studio</h1>
+          <span><span class="tag-dot"></span>Plan, simulate & visualise</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="top-grid">
+      <div class="card" aria-label="SIP and EMI calculator">
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-title">
+              <h2 id="form-title">SIP inputs</h2>
+              <span id="form-sub">
+                Define your systematic investment plan to project future value.
+              </span>
+            </div>
+            <div class="mode-toggle" aria-label="Calculator mode">
+              <button class="mode-btn active" data-mode="sip" type="button">
+                SIP<span>📈</span>
+              </button>
+              <button class="mode-btn" data-mode="emi" type="button">
+                EMI<span>📊</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-grid" id="sip-fields">
+            <div class="field">
+              <div class="field-label">
+                Monthly SIP amount
+                <span class="help-icon"
+                  data-tooltip="The fixed amount you plan to invest every month via SIP.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <span class="prefix">₹</span>
+                <input id="sip-amount" type="number" min="0" step="100" placeholder="e.g. 5000" />
+              </div>
+              <div class="field-hint">Try values from ₹1,000 to ₹50,000.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                Investment duration (years)
+                <span class="help-icon"
+                  data-tooltip="Total period for which you will continue the SIP.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <input id="sip-years" type="number" min="1" max="50" step="1" placeholder="e.g. 15" />
+              </div>
+              <div class="field-hint">Longer horizons show compounding better.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                Expected annual return (%)
+                <span class="help-icon"
+                  data-tooltip="Estimated annualised rate of return before taxes.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <input id="sip-rate" type="number" min="1" max="30" step="0.1" placeholder="e.g. 12" />
+              </div>
+              <div class="field-hint">Equity SIPs often assume 10–15% for illustration.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                SIP frequency
+                <span class="help-icon"
+                  data-tooltip="Most SIPs are monthly. Yearly is for bulk annual contributions.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <select id="sip-frequency">
+                  <option value="monthly" selected>Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid" id="emi-fields" style="display:none;">
+            <div class="field">
+              <div class="field-label">
+                Loan amount (principal)
+                <span class="help-icon"
+                  data-tooltip="Total amount borrowed from the lender.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <span class="prefix">₹</span>
+                <input id="emi-principal" type="number" min="0" step="1000" placeholder="e.g. 1500000" />
+              </div>
+              <div class="field-hint">Typical home loans start in lakhs.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                Loan tenure (years)
+                <span class="help-icon"
+                  data-tooltip="Duration of the loan in years.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <input id="emi-years" type="number" min="1" max="40" step="1" placeholder="e.g. 20" />
+              </div>
+              <div class="field-hint">Shorter tenures reduce total interest paid.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                Interest rate (annual %)
+                <span class="help-icon"
+                  data-tooltip="Annual interest rate charged on your loan.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <input id="emi-rate" type="number" min="1" max="24" step="0.1" placeholder="e.g. 8.5" />
+              </div>
+              <div class="field-hint">Use your bank’s effective annual rate.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">
+                Repayment frequency
+                <span class="help-icon"
+                  data-tooltip="Most loans use monthly EMIs.">
+                  ?
+                </span>
+              </div>
+              <div class="input-shell">
+                <select id="emi-frequency">
+                  <option value="monthly" selected>Monthly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <div class="btn-row">
+              <button class="btn btn-primary js-ripple" id="btn-sip" type="button">
+                <span class="btn-icon">⚡</span>
+                Calculate SIP
+              </button>
+              <button class="btn btn-primary js-ripple" id="btn-emi" type="button" style="display:none;">
+                <span class="btn-icon">⚡</span>
+                Calculate EMI
+              </button>
+              <button class="btn btn-secondary" id="btn-reset" type="button">
+                Reset
+              </button>
+            </div>
+            <div class="mini-note">
+              Hint: Change one input at a time and watch the charts update.
+            </div>
+          </div>
+
+          <div class="error" id="error-msg" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="summary-grid" id="summary-panel">
+            <div class="summary-block">
+              <div class="summary-header">
+                <span id="results-title">SIP projection</span>
+                <span class="summary-pill" id="results-badge">Monthly compounding</span>
+              </div>
+              <div class="metric-main">
+                <span class="metric-label" id="metric-main-label">Estimated corpus at maturity</span>
+                <div class="metric-value">
+                  <span class="metric-currency">₹</span>
+                  <span id="metric-main-value">0</span>
+                </div>
+                <span class="metric-sub" id="metric-main-sub">
+                  Start by entering SIP details to view your projected wealth.
+                </span>
+              </div>
+            </div>
+            <div class="summary-block">
+              <div class="metric-side">
+                <span id="metric-side-line1">Total invested: ₹0</span>
+                <span id="metric-side-line2">Total returns: ₹0</span>
+              </div>
+              <span class="metric-chip">
+                <span class="metric-dot"></span>
+                <span id="metric-chip-label">Compounding in progress</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="viz-row" aria-label="Charts and breakdowns">
+      <div class="viz-card">
+        <div class="viz-header">
+          <div class="viz-header-left">
+            <div class="viz-heading" id="viz-line-heading">Corpus / balance over time</div>
+            <div class="viz-subheading" id="viz-line-sub">
+              Year‑wise trajectory of your investment or outstanding loan.
+            </div>
+          </div>
+          <div class="viz-tag" id="viz-line-tag">SIP mode</div>
+        </div>
+        <div class="viz-body">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <div class="viz-header-left">
+            <div class="viz-heading" id="viz-pie-heading">Composition breakdown</div>
+            <div class="viz-subheading" id="viz-pie-sub">
+              How much is principal vs growth or interest.
+            </div>
+          </div>
+        <div class="viz-tag" id="viz-pie-tag">Invested vs returns</div>
+        </div>
+        <div class="viz-body pie-card-inner">
+          <canvas id="pieChart"></canvas>
+          <div class="viz-legend" id="viz-legend"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="info-card">
+        <h2>What these numbers mean</h2>
+        <p>
+          SIP calculations use a future value formula for recurring investments, converting your annual return into a monthly rate and compounding every period. [web:3][web:4][web:6][web:23]
+        </p>
+        <p>
+          EMI outputs follow the standard equated monthly installment formula using your principal, tenor in months, and monthly interest rate to derive a fixed payment. [web:6][web:9][web:23]
+        </p>
+        <ul>
+          <li>SIP assumes regular investments at the chosen frequency.</li>
+          <li>EMI assumes a fixed interest rate and equal monthly payments.</li>
+          <li>Real‑world results depend on market performance and lender terms.</li>
+        </ul>
+      </div>
+
+      <div class="contact-card" aria-label="Contact form">
+        <h2>Contact & feedback</h2>
+        <p>
+          Want a branded version, export to Excel, or extra sliders? Send a note with your requirements.
+        </p>
+        <form id="contact-form">
+          <div class="contact-grid">
+            <div class="field">
+              <div class="field-label">Name</div>
+              <div class="input-shell">
+                <input id="contact-name" type="text" placeholder="Your name" />
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Email</div>
+              <div class="input-shell">
+                <input id="contact-email" type="email" placeholder="you@example.com" />
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Message</div>
+              <div class="input-shell">
+                <textarea id="contact-message" placeholder="Share your query or suggestions"></textarea>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-secondary" type="submit">Send message</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="https://www.mutualfundssahihai.com/en/calculators/sip-calculator" target="_blank" rel="noopener">
+          Learn about SIPs
+        </a>
+        <a href="https://cleartax.in/s/emi-calculation-formula" target="_blank" rel="noopener">
+          EMI formula guide
+        </a>
+        <a href="https://www.chartjs.org/docs/latest/" target="_blank" rel="noopener">
+          Chart.js docs
+        </a>
+      </div>
+      <div class="disclaimer">
+        This experience is for education only and does not constitute financial advice. Always consult a registered advisor before investing or borrowing.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    /* JavaScript content is provided in the final section */
+  </script>
+</body>
+</html>
